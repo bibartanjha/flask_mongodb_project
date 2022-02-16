@@ -1,0 +1,51 @@
+{% extends 'index.html' %}
+
+
+{% block head %}
+<title>EE461L: Sign-up</title>
+{% endblock %}
+
+{% block body %}
+<div class ="container" id="signuppage">
+	{% if t %}
+	<div class ="alert alert-success" style="margin-top: 20px">
+		<h6>{{t}}</h6>
+	</div>
+	{% endif %}
+
+	{% if f %}
+	<div class ="alert alert-danger" style="margin-top: 20px">
+		<h6>{{f}}</h6>
+	</div>
+	{% endif %}
+
+	<div class="container p-5">
+		<h4 style="text-align: center; font-family: 'Ubuntu';">SIGN UP</h4>
+		<div class="container" style="text-align: center; width:500px;">
+			<form action="/signup" method="post">
+				<div class="item" style="margin-bottom:5px">
+					<p>Email: </p>
+					<input type="email" name="email" id="signup_email" required autofocus>
+				</div>
+				<div class="item" style="margin-top:5px">
+					<p>Password: </p>
+					<input type="password" name="pass" id="signup_pass" required>
+				</div>
+				<div class="item" style="padding-top:5px;">
+					<button type="submit" id="signupButton" value="Sign Up">Sign up</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<style>
+	h4, h6 {
+		text-align: center; 
+		font-family: 'Ubuntu';
+		margin-bottom: 35px;
+	}
+</style>
+
+
+{% endblock %}

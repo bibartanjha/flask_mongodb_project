@@ -1,0 +1,358 @@
+{% extends 'index.html' %}
+{% block head %}
+{% block title %}
+<title>Players</title>
+{% endblock %}
+<style>
+    body {text-align: center;}
+    #scroll_top_button {
+        /* display: none; */
+        position: fixed;
+        bottom: 0px;
+        right: 10px;
+        z-index: 99;
+        border: none;
+        outline: none;
+        background-color: #008bed;
+        color: white;
+        cursor: pointer;
+        padding: 15px;
+        border-radius: 10px;
+        font-size: 18px;
+    }
+
+    #scroll_top_button:hover {
+        background-color: #96d4ff
+    }
+
+    input[type="submit"]{
+        border: 0px transparent;
+        border-radius: 15px;
+        font-size: 15px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-left:5px;
+        margin-right:5px;
+        padding: 5px 22px;
+        font-size: 14px;
+        text-align: center;
+        color: black;
+        background-color: #008bed;
+        font-family: 'Ubuntu';
+    }
+
+    h1, h2, h3, h4 {
+    font-family: 'Ubuntu';
+    }
+</style>
+
+{% endblock %}
+{% block body %}  
+
+<div class="jumbotron text-white" style="text-align: center; border-radius: 0px; margin-bottom:0px; background-color:#008bed">
+    <h1>Selected Players</h1>
+</div>
+
+<div style="background-color: #96d4ff; padding-top:20px; padding-bottom: 5px;">
+    <div class="button-container">
+    <form action="/Players" method="GET">
+        <select hidden name="Name" id="Name" class="custom-select-sm">
+            <option selected>All names</option>
+        </select>
+
+        <select name="Status" id="Status" class="custom-select-sm">
+            <option disabled selected>Filter by status</option>
+            <option>All statuses</option>
+            <option>Active</option>
+            <option>Not Active</option>
+        </select>
+        <select name="Position" id="Position" class="custom-select-sm">
+            <option disabled selected>Filter by position</option>
+            <option>All positions</option>
+            <option>Forward</option>
+            <option>Center</option>
+            <option>Guard</option>
+        </select>
+        <select name="Team" id="Team" class="custom-select-sm">
+            <option disabled selected>Filter by team</option>
+            <option>All teams</option>
+            <option>76ers</option>
+            <option>Bucks</option>
+            <option>Bulls</option>
+            <option>Cavaliers</option>
+            <option>Celtics</option>
+            <option>Clippers</option>
+            <option>Grizzlies</option>
+            <option>Hawks</option>
+            <option>Heat</option>
+            <option>Hornets</option>
+            <option>Jazz</option>
+            <option>Kings</option>
+            <option>Knicks</option>
+            <option>Lakers</option>
+            <option>Magic</option>
+            <option>Mavericks</option>
+            <option>Nets</option>
+            <option>Nuggets</option>
+            <option>Pacers</option>
+            <option>Pelicans</option>
+            <option>Pistons</option>
+            <option>Rockets</option>
+            <option>Spurs</option>
+            <option>Suns</option>
+            <option>Thunder</option>
+            <option>Timberwolves</option>
+            <option>TrailBlazers</option>
+            <option>Warriors</option>
+            <option>Wizards</option>
+        </select>
+        <select name="Sort" id="Sort" class="custom-select-sm">
+            <option disabled selected>Sort by</option>
+            <option>Default: Name (A-Z)</option>
+            <option>Name (Z-A)</option>
+            <option>Start Year (Earliest to Latest)</option>
+            <option>Start Year (Latest to Earliest)</option>
+            <option>End Year (Earliest to Latest)</option>
+            <option>End Year (Latest to Earliest)</option>
+        </select><br><br>
+        <select name="SearchCategory" id="SearchCategory" class="custom-select-sm">
+            <option disabled selected>Search Category</option>
+            <option>Name</option>
+            <option>Position</option>
+            <option>Team</option>
+        </select>
+        <input type="text" id="search_name" name="search" placeholder="Search"><br>
+        <input type="submit" name="submit" value="Stack changes" class="btn btn-secondary ml-3">
+    </form>
+    <form action="/Players" method="POST">
+        <input type="submit" name="submit" value="Default">
+    </form>
+    </div>
+</div>  
+<div class="container" id="playerspage_m">
+    <br>
+    {% if playersDict['filter_name'] != None %}
+        {% if playersDict['filter_name']|lower != "all names" and playersDict['filter_name']|lower != "none"%}
+            <h6><b>Filter (Name): {{ playersDict['filter_name'] }}</b></h6>
+        {% endif %}
+    {% endif %}
+    {% if playersDict['filter_status'] != None %}
+        {% if playersDict['filter_status']|lower != "all statuses" and playersDict['filter_status']|lower != "none"%}
+            <h6><b>Filter (Status): {{ playersDict['filter_status'] }}</b></h6>
+        {% endif %}
+    {% endif %}
+    {% if playersDict['filter_position'] != None%}
+        {% if playersDict['filter_position']|lower != "all positions" and playersDict['filter_position']|lower != "none" %}
+            <h6><b>Filter (Position): {{ playersDict['filter_position'] }}</b></h6>
+        {% endif %}
+    {% endif %}
+    {% if playersDict['filter_team'] != None%}
+        {% if playersDict['filter_team']|lower != "all teams" and playersDict['filter_team']|lower != "none"%}
+            <h6><b>Filter (Team): {{ playersDict['filter_team'] }}</b></h6>
+        {% endif %}
+    {% endif %}
+    {% if playersDict['sort'] != "Default: Name (A-Z)" and playersDict['sort'] != None and playersDict['sort'] != "None"  %}
+        <h6><b>Sort: {{ playersDict['sort'] }}</b></h6>
+    {% endif %}
+    {% if playersDict['search'] != "None" and playersDict['search'] != None and playersDict['search'] != "" and playersDict['search_category'] != "None" and playersDict['search_category'] != None and playersDict['search_category'] != "" %}
+        <h6><b>Search (Category={{ playersDict['search_category'] }}): {{ playersDict['search'] }}</b></h6>
+    {% endif %}
+    <h6><b>Number of instances: {{ playersDict['players']| length }}</b></h6>
+    <h6><b>Page {{ page }} of {{ num_pages }}</b></h6>
+
+
+    <div class = "card-columns" style="padding-top: 5px">
+        {% for i in range(posts| length) %}
+            {% if (i % 2) == 0 %}
+                <div class = "card bg-white border-primary" style="font-family:'Ubuntu';">
+                    <h4 class="mt-3"><b>{{posts[i]['Name']}}</b></h4>
+                    <img src="/static/images/playerspage/{{ posts[i]['Name'] }}.jpg" alt="No picture found" width="120" height="180" />
+                    <br>
+                    <br>
+                    <table id="player_table">
+                        <tr>
+                            <td style="font-weight:bold">Status</td>
+                            <td>{{posts[i]['Status']}}</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bold">Team</td>
+                            <td>{{posts[i]['Team']}}</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bold">Position</td>
+                            <td>{{posts[i]['Position']}}</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bold">Career</td>
+                            <td>{{posts[i]['Start Year']}}-{{posts[i]['End Year']}}</td>
+                        </tr>
+                    </table>
+                    <br>   
+                    <form action="/PlayerInstancePage" method="POST">
+                        <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                            <option selected>{{posts[i]['Name']}}</option> 
+                        </select>
+                        <input type="submit" value="Player Page" class="btn btn-primary ml-3 mb-3" />
+                    </form>
+                </div>
+            {% else %}
+                <div class = "card bg-white border-primary" style="font-family:'Ubuntu'; " >
+                    <h4 class="mt-3"><b>{{posts[i]['Name']}}</b></h4>
+                    <img  src="/static/images/playerspage/{{ posts[i]['Name'] }}.jpg" alt="No picture found" width="120" height="180" />
+                    <br>
+                    <br>
+                    <table id="player_table">
+                        <tr>
+                            <td style="font-weight:bold">Status</td>
+                            <td>{{posts[i]['Status']}}</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bold">Team</td>
+                            <td>{{posts[i]['Team']}}</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bold">Position</td>
+                            <td>{{posts[i]['Position']}}</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bold">Career</td>
+                            <td>{{posts[i]['Start Year']}}-{{posts[i]['End Year']}}</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <form action="/PlayerInstancePage" method="POST">
+                        <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                            <option selected>{{posts[i]['Name']}}</option> 
+                        </select>
+                        <input type="submit" value="Player Page" class="btn btn-primary ml-3 mb-3">
+                    </form>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="container" id="pagination_container">
+        <span>
+        <div style="display: flex; margin: auto;">
+            <form action="/Players" method="GET">
+                <select hidden name="page" id="page" class="custom-select-sm">
+                    {% if page == 1 %}
+                        <option selected>{{1}}</option> 
+                    {% else %}
+                        <option selected>{{page - 1}}</option> 
+                    {% endif %}
+                </select>
+                <select hidden name="Name" id="Name" class="custom-select-sm">
+                    <option selected>{{playersDict['filter_name']}}</option> 
+                </select>
+                <select hidden name="Status" id="Status" class="custom-select-sm">
+                    <option selected>{{playersDict['filter_status']}}</option> 
+                </select>
+                <select hidden name="Status" id="Status" class="custom-select-sm">
+                    <option selected>{{playersDict['filter_status']}}</option> 
+                </select>
+                <select hidden name="Position" id="Position" class="custom-select-sm">
+                    <option selected>{{playersDict['filter_position']}}</option> 
+                </select>
+                 <select hidden name="Team" id="Team" class="custom-select-sm">
+                    <option selected>{{playersDict['filter_team']}}</option> 
+                </select>
+                 <select hidden name="Sort" id="Sort" class="custom-select-sm">
+                    <option selected>{{playersDict['sort']}}</option> 
+                </select>
+                <select hidden name="search" id="search" class="custom-select-sm">
+                    <option selected>{{playersDict['search']}}</option> 
+                </select>
+                <select hidden name="SearchCategory" id="SearchCategory" class="custom-select-sm">
+                    <option selected>{{playersDict['search_category']}}</option> 
+                </select>
+                <input type="submit" value="<<" class="btn btn-secondary ml-3" id="pagination">
+            </form>
+
+            {% for i in range(p_range[0], p_range[1]) %}
+            <form action="/Players" method="GET">
+                <select hidden name="page" id="page" class="custom-select-sm">
+                    <option selected>{{i}}</option> 
+                </select>
+                <select hidden name="Name" id="Name" class="custom-select-sm">
+                    <option selected>{{playersDict['filter_name']}}</option> 
+                </select>
+                <select hidden name="Status" id="Status" class="custom-select-sm">
+                    <option selected>{{playersDict['filter_status']}}</option> 
+                </select>
+                <select hidden name="Position" id="Position" class="custom-select-sm">
+                    <option selected>{{playersDict['filter_position']}}</option> 
+                </select>
+                 <select hidden name="Team" id="Team" class="custom-select-sm">
+                    <option selected>{{playersDict['filter_team']}}</option> 
+                </select>
+                 <select hidden name="Sort" id="Sort" class="custom-select-sm">
+                    <option selected>{{playersDict['sort']}}</option> 
+                </select>
+                <select hidden name="search" id="search" class="custom-select-sm">
+                    <option selected>{{playersDict['search']}}</option> 
+                </select>
+                <select hidden name="SearchCategory" id="SearchCategory" class="custom-select-sm">
+                    <option selected>{{playersDict['search_category']}}</option> 
+                </select>
+                {% if i == page %}
+                    <input type="submit" value="{{i}}" class="btn btn-secondary ml-3" id="paginationActive">
+                {% else %}
+                    <input type="submit" value="{{i}}" class="btn btn-secondary ml-3" id="pagination">
+                {% endif %}
+            </form>
+            {% endfor %}
+
+            <form action="/Players" method="GET">
+                <select hidden name="page" id="page" class="custom-select-sm">
+                    {% if page == num_pages %}
+                        <option selected>{{num_pages}}</option> 
+                    {% else %}
+                        <option selected>{{page + 1}}</option> 
+                    {% endif %}
+                </select>
+                <select hidden name="Name" id="Name" class="custom-select-sm">
+                    <option selected>{{playersDict['filter_name']}}</option> 
+                </select>
+                <select hidden name="Status" id="Status" class="custom-select-sm">
+                    <option selected>{{playersDict['filter_status']}}</option> 
+                </select>
+                <select hidden name="Position" id="Position" class="custom-select-sm">
+                    <option selected>{{playersDict['filter_position']}}</option> 
+                </select>
+                 <select hidden name="Team" id="Team" class="custom-select-sm">
+                    <option selected>{{playersDict['filter_team']}}</option> 
+                </select>
+                 <select hidden name="Sort" id="Sort" class="custom-select-sm">
+                    <option selected>{{playersDict['sort']}}</option> 
+                </select>
+                <select hidden name="search" id="search" class="custom-select-sm">
+                    <option selected>{{playersDict['search']}}</option> 
+                </select>
+                <select hidden name="SearchCategory" id="SearchCategory" class="custom-select-sm">
+                    <option selected>{{playersDict['search_category']}}</option> 
+                </select>
+                <input type="submit" value=">>" class="btn btn-secondary ml-3" id="pagination">
+            </form>
+        </div>
+        <span>
+    </div>
+    <button onclick="topFunction()" id="scroll_top_button" title="Scroll Back to Top">Top</button>
+</div>
+<style>
+
+    #player_table{
+        margin: 0px auto;
+        background-color: #96d4ff;
+    }
+
+    #player_table tr:nth-child(even){
+        background-color: #008bed;
+    }
+    #
+    #paginationActive {
+        background-color: #96d4ff;
+    }
+
+</style>
+{% endblock %}

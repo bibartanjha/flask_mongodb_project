@@ -1,0 +1,25 @@
+{% extends 'index.html' %}
+
+
+{% block head %}
+<title>EE461L: Log-in</title>
+{% endblock %}
+
+{% block body %}
+
+<div class ="container">
+
+	<div class ="alert alert-success" style="margin-top: 20px">
+		<h2>{{teamname}} was removed from your favorites.</h2>
+	</div>
+
+
+<div class="container p-5">
+	<h4 style="text-align: center">REMOVED TEAM FROM FAVORITES</h4>
+	<!-- need to add form thing here with RESTful api but add later -->
+	<div class="container" style="text-align: center; width:500px;">
+		<h6>Go to the <a href="/favteam">Favorite Teams page</a> to see your updated Favorite Teams page!</h6>
+	</div>
+</div>
+</div>
+{% endblock %}

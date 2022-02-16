@@ -1,0 +1,165 @@
+{% extends 'index.html' %}
+
+{% block head %}
+<style>
+
+    h1, h2, h3, h4 {
+        font-family: 'Ubuntu';
+    }
+
+    body {text-align: center;}
+    }
+    td {
+      padding: 0 10px;
+    }
+
+    #scroll_top_button_leaders {
+        /* display: none; */
+        position: fixed;
+        bottom: 20px;
+        right: 30px;
+        z-index: 99;
+        border: none;
+        outline: none;
+        background-color: red;
+        color: white;
+        cursor: pointer;
+        padding: 15px;
+        border-radius: 10px;
+        font-size: 18px;
+    }
+
+    #scroll_top_button_leaders:hover {
+        background-color: #555
+    }
+
+    #franchisetable{
+        margin: 0px auto;
+        background-color: #cbf194;
+    }
+
+    #franchisetable tr:nth-child(even){
+        background-color: #70bf00;
+    }
+
+</style>
+
+<title>Franchise Leaders</title>
+{% endblock %}
+
+{% block body %}
+<div class="mx-auto" style="width:100%">
+    <div class="jumbotron text-white" style="background-color: #70bf00; border-radius:0px; margin-bottom:0px;">
+        <h1 style = "color: white">Franchise Leaders</h1>
+        <br>
+        <h4 style = "color: white">Select a team below to learn about its franchise leaders</h4>
+        <span>
+        {% if team_selected %}
+            <form action="/Franchise_Leaders" method="GET">
+                <input style="color:#70bf00; font-weight: bold;" type="submit" value="See all teams" id="PLeaderButton">
+            </form>
+        {% endif %}
+        </span>
+    </div>
+</div>
+{% if team_selected %}
+<div class="container" id="franchise_page">
+    <div class="grid-item">
+        <h2><b>{{team_leader_info['Team Name']}}</b></h2>
+        <img name = "image" src="/static/images/nbaTeams_fran/{{ team_leader_info['Team Name'] }}.jpg" alt="No picture found"  height="180">
+
+        <br><br>
+        <div class="row">
+            <div class="col">
+                <h4 style="margin-top:20px"><b>Leaders</b></h4>
+                <table id="franchisetable" style="width:400px">
+                    <tr>
+                        <td style="font-weight: bold">Category</td>
+                        <td style="font-weight: bold">Player Name</td>
+                        <td style="font-weight: bold">Total</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Franchise Leader Points</td>
+                        <td>{{team_leader_info['Franchise Leader Points']}}</td>
+                        <td>{{team_leader_info['Total Points']}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Franchise Leader Assists</td>
+                        <td>{{team_leader_info['Franchise Leader Assists']}}</td>
+                        <td>{{team_leader_info['Total Assists']}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Franchise Leader Rebounds</td>
+                        <td>{{team_leader_info['Franchise Leader Rebounds']}}</td>
+                        <td>{{team_leader_info['Total Rebounds']}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Franchise Leader Blocks</td>
+                        <td>{{team_leader_info['Franchise Leader Blocks']}}</td>
+                        <td>{{team_leader_info['Total Blocks']}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Franchise Leader Steals</td>
+                        <td>{{team_leader_info['Franchise Leader Steals']}}</td>
+                        <td>{{team_leader_info['Total Steals']}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col" style="width:400px">
+                <h4 style="margin-top:40px"><b>Links</b></h4>
+                <span>
+                    <form action="/TeamInstancePage" method="POST">
+                        <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                            <option selected>{{team_name}}</option> 
+                        </select>
+                        <input style="color:#70bf00; font-weight: bold;" type="submit" value="Team Page" class="btn btn-secondary ml-3" id="PTeamButton">
+                    </form>
+                </span>
+                <span><a style="color:#70bf00; font-weight: bold;" class="btn btn-secondary ml-3" id="TWikiButton" href="{{wiki_page}}" role="button">Wikipedia</a></span>
+
+                <br>
+                <h4 style="margin-top:40px"><b>Social Media</b></h4>
+                {% if team_info['Facebook'] == "" and team_info['Instagram'] == "" and team_info['Twitter'] == ""%}
+                    <h6>None</h6>
+                {% else %}
+                <span>
+                    {% if not team_info['Facebook'] == "" %}
+                        <a href="{{team_info['Facebook']}}" class="fa fa-facebook"></a>
+                    {% endif %}
+                    </span>
+                    <span>
+                    {% if not team_info['Twitter'] == "" %}
+                        <a href="{{team_info['Twitter']}}" class="fa fa-twitter"></a>
+                    {% endif %}
+                    </span>
+                    <span>
+                    {% if not team_info['Instagram'] == "" %}
+                        <a href="{{team_info['Instagram']}}" class="fa fa-instagram"></a>
+                    {% endif %}
+                </span>
+                {% endif %}
+            </div>
+        </div>
+    {% else %}
+    <div class="container" id="team_fran_images">
+    {% for team in franLeaders_documents %}
+        <form action="/Franchise_Leaders" method="POST" style="display: inline;">
+             <table style="width: 120px; display: inline; background-color: transparent; padding: 10px;">
+                <tr>
+                    <td style="background-color: transparent; padding: 0px;">
+                        <input type="image" id="{{team['Team Name']}} "style="margin:0px;" src="/static/images/nbaTeams_fran/{{ team['Team Name'] }}.jpg" alt="No picture found" width="120" height="120">
+                    </td>
+                    <tr style="background-color: transparent;">
+                        <td id="label" style="background-color: transparent;">
+                            <select hidden name="Team" id="Team" class="custom-select-sm">
+                                <option selected>{{team['Team Name']}}</option> 
+                            </select>
+                            <label for="{{team['Team Name']}}">{{team['Team Name']}}</label>
+                        </td>
+                </tr>
+        </form>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+{% endblock %}

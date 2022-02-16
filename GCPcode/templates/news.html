@@ -1,0 +1,344 @@
+{% extends 'index.html' %}
+{% block head %}
+{% block title %}
+<title>News</title>
+{% endblock %}
+<style>
+body {text-align: center;}
+#scroll_top_button {
+    /* display: none; */
+    position: fixed;
+    bottom: 0px;
+    right: 10px;
+    z-index: 99;
+    border: none;
+    outline: none;
+    background-color: #bf0a0a;
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
+#scroll_top_button:hover {
+    background-color: #ff9e9e
+}
+
+input[type="submit"]{
+        border: 0px transparent;
+        border-radius: 15px;
+        font-size: 15px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        margin-left:5px;
+        margin-right:5px;
+        padding: 5px 22px;
+        font-size: 14px;
+        text-align: center;
+        color: black;
+        background-color: #bf0a0a;
+        font-family: 'Ubuntu';
+    }
+
+    h1, h2, h3, h4 {
+    font-family: 'Ubuntu';
+}
+</style>
+
+{% endblock %}
+{% block body %} 
+
+<div class="jumbotron text-white" style="text-align: center; border-radius: 0px; margin-bottom: 0px; background-color: #bf0a0a;">
+    <h1>Latest News</h1>
+</div>
+<div style="background-color: #ff9e9e; padding-top: 20px; padding-bottom: 5px;">
+    <div class="button-container">
+    <form action="/News" method="GET">
+        <select hidden name="Title" id="Title" class="custom-select-sm">
+            <option selected>All titles</option>
+        </select>
+        <select name="Category" id="Category" class="custom-select-sm">
+            <option disabled selected>Filter by category</option>
+            <option>All categories</option>
+            <option>Injuries</option>
+            <option>Transactions</option>
+            <option>Sit-Start</option>
+            <option>Risers</option>
+        </select>
+        <select name="Team" id="Team" class="custom-select-sm">
+            <option disabled selected>Filter by team</option>
+            <option>All teams</option>
+            <option>Celtics</option>
+            <option>Bulls</option>
+            <option>Cavaliers</option>
+            <option>Mavericks</option>
+            <option>Nuggets</option>
+            <option>Rockets</option>
+            <option>Clippers</option>
+            <option>Lakers</option>
+            <option>Grizzlies</option>
+            <option>Heat</option>
+            <option>Bucks</option>
+            <option>Pelicans</option>
+            <option>Thunder</option>
+            <option>Magic</option>
+            <option>TrailBlazers</option>
+            <option>Raptors</option>
+            <option>Wizards</option>
+        </select>
+        <select name="Sort" id="Sort" class="custom-select-sm">
+            <option disabled selected>Sort by</option>
+            <option>Default: Date (Latest to Earliest)</option>
+            <option>Date (Earliest to Latest)</option>
+            <option>Title (A to Z)</option>
+            <option>Title (Z to A)</option>
+            <option>Source (A to Z)</option>
+            <option>Source (Z to A)</option>
+        </select>
+        <br><br>
+        <select name="SearchCategory" id="SearchCategory" class="custom-select-sm">
+            <option disabled selected>Search Category</option>
+            <option>Title</option>
+            <option>Categories</option>
+            <option>Team</option>
+        </select>
+        <input type="text" id="search" name="search" placeholder="Search"><br>
+        <input type="submit" name="submit" value="Stack changes" class="btn btn-secondary ml-3">
+    </form>
+    <form action="/News" method="POST">
+        <input type="submit" name="submit" value="Default">
+    </form>
+    </div>
+</div>
+
+<div class="container" id="newspage_m">
+    <br>
+    {% if newsDict['filter_title'] != None %}
+        {% if newsDict['filter_title']|lower != "all titles" and newsDict['filter_title']|lower != "none"%}
+            <h6><b>Filter (Title): {{ newsDict['filter_title'] }}</b></h6>
+        {% endif %}
+    {% endif %}
+    {% if newsDict['filter_category'] != None %}
+        {% if newsDict['filter_category']|lower != "all categories" and newsDict['filter_category']|lower != "none"%}
+            <h6><b>Filter (Category): {{ newsDict['filter_category'] }}</b></h6>
+        {% endif %}
+    {% endif %}
+    {% if newsDict['filter_team'] != None %}
+        {% if newsDict['filter_team']|lower != "all teams" and newsDict['filter_team']|lower != "none"%}
+            <h6><b>Filter (Category): {{ newsDict['filter_team'] }}</b></h6>
+        {% endif %}
+    {% endif %}
+    {% if newsDict['sort'] != "Default: Date (Latest to Earliest)" and newsDict['sort'] != None and newsDict['sort'] != "None" %}
+        <h6><b>Sort: {{ newsDict['sort'] }}</b></h6>
+    {% endif %}
+    {% if newsDict['search'] != "None" and newsDict['search'] != None and newsDict['search'] != "" and newsDict['search_category'] != "None" and newsDict['search_category'] != None and newsDict['search_category'] != "" %}
+        <h6><b>Search (Category={{ newsDict['search_category'] }}): {{ newsDict['search'] }}</b></h6>
+    {% endif %}
+    <h6><b>Number of instances: {{ newsDict['num_instances'] }}</b></h6>
+    <h6><b>Page {{ page }} of {{ num_pages }}</b></h6>
+
+    <div class = "card-columns" style="min-height:800px; padding-top:5px">
+        {% for i in range(posts| length)%}
+            {% if (i % 2) == 0 %}
+            <div class="card bg-white border-primary" style="font-family:'Ubuntu';" id="newscard">
+                <h4 class="mt-3"><b>{{posts[i]['Title']}}</b></h4>
+                <br>
+                <table id="news_table">
+            	 	<tr>
+                        <td style="font-weight:bold">Date Posted</td>
+                        <td>{{posts[i]['Updated'][:10]}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Categories</td>
+                        <td>{{posts[i]['Categories']}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Team</td>
+                        <td>{{posts[i]['Team']}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Source</td>
+                        <td>{{posts[i]['OriginalSource']}}</td>
+                    </tr>
+                </table>
+                <br>
+                <figure>
+                    <img src="/static/images/newspage/{{ posts[i]['OriginalSource'] }}.jpg" alt="No picture found" width="120" height="120" />
+                    <figcaption>Source: {{posts[i]['OriginalSource']}}</figcaption>
+                </figure>
+                <a href = "{{posts[i]['OriginalSourceUrl']}}">Original Source Link</a>
+                <br>
+                <form action="/NewsInstancePage" method="POST">
+                    <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                        <option selected>{{posts[i]['Title']}}</a> 
+                    </select>
+                    <input type="submit" value="Article Page" class="btn btn-danger ml-3 mb-3" />
+                </form>
+            </div>
+            {% else %}
+            <div class="card bg-white border-primary" style="font-family:'Ubuntu'; ">
+                <h4 class="mt-3"><b>{{posts[i]['Title']}}</b></h4>
+                <br>
+                <table id="news_table">
+                    <tr>
+                        <td style="font-weight:bold">Date Posted</td>
+                        <td>{{posts[i]['Updated'][:10]}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Categories</td>
+                        <td>{{posts[i]['Categories']}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Team</td>
+                        <td>{{posts[i]['Team']}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Source</td>
+                        <td>{{posts[i]['OriginalSource']}}</td>
+                    </tr>
+                </table>
+                <br>
+                <figure>
+                    <img src="/static/images/newspage/{{ posts[i]['OriginalSource'] }}.jpg" alt="No picture found" width="120" height="120" />
+                    <figcaption>Source: {{posts[i]['OriginalSource']}}</figcaption>
+                </figure>
+                <a href = "{{posts[i]['OriginalSourceUrl']}}">Original Source Link</a>
+                <br>
+                <form action="/NewsInstancePage" method="POST">
+                    <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                        <option selected>{{posts[i]['Title']}}</a> 
+                    </select>
+                    <input type="submit" value="Article Page" class="btn btn-danger ml-3 mb-3" />
+                </form>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+
+    <div class="container" id="pagination_container_news">
+        <span>
+            <div style="display: flex;">
+                <form action="/News" method="GET">
+                    <select hidden name="page" id="page" class="custom-select-sm">
+                        {% if page == 1 %}
+                            <option selected>{{1}}</option> 
+                        {% else %}
+                            <option selected>{{page - 1}}</option> 
+                        {% endif %}
+                    </select>
+                    <select hidden name="Title" id="Title" class="custom-select-sm">
+                        <option selected>{{newsDict['filter_title']}}</option> 
+                    </select>
+                    <select hidden name="Category" id="Category" class="custom-select-sm">
+                        <option selected>{{newsDict['filter_category']}}</option> 
+                    </select>
+                    <select hidden name="Team" id="Team" class="custom-select-sm">
+                        <option selected>{{newsDict['filter_team']}}</option> 
+                    </select>
+                    <select hidden name="Sort" id="Sort" class="custom-select-sm">
+                        <option selected>{{newsDict['sort']}}</option> 
+                    </select>
+                    <select hidden name="search" id="search" class="custom-select-sm">
+                    <option selected>{{newsDict['search']}}</option> 
+                </select>
+                <select hidden name="SearchCategory" id="SearchCategory" class="custom-select-sm">
+                    <option selected>{{newsDict['search_category']}}</option> 
+                </select>
+                    <input type="submit" value="<<" class="btn btn-secondary ml-3">
+                </form>
+
+                {% for i in range(1, num_pages+1) %}
+                <form action="/News" method="GET">
+                    <select hidden name="page" id="page" class="custom-select-sm">
+                        <option selected>{{i}}</option> 
+                    </select>
+                    <select hidden name="Title" id="Title" class="custom-select-sm">
+                        <option selected>{{newsDict['filter_title']}}</option> 
+                    </select>
+                    <select hidden name="Category" id="Category" class="custom-select-sm">
+                        <option selected>{{newsDict['filter_category']}}</option> 
+                    </select>
+                    <select hidden name="Team" id="Team" class="custom-select-sm">
+                        <option selected>{{newsDict['filter_team']}}</option> 
+                    </select>
+                    <select hidden name="Sort" id="Sort" class="custom-select-sm">
+                        <option selected>{{newsDict['sort']}}</option> 
+                    </select>
+                    <select hidden name="search" id="search" class="custom-select-sm">
+                    <option selected>{{newsDict['search']}}</option> 
+                </select>
+                <select hidden name="SearchCategory" id="SearchCategory" class="custom-select-sm">
+                    <option selected>{{newsDict['search_category']}}</option> 
+                </select>
+                    {% if i == page %}
+                        <input type="submit" value="{{i}}" class="btn btn-secondary ml-3" id="paginationActive">
+                    {% else %}
+                        <input type="submit" value="{{i}}" class="btn btn-secondary ml-3" id="pagination">
+                    {% endif %}
+                </form>
+                {% endfor %}
+
+                <form action="/News" method="GET">
+                    <select hidden name="page" id="page" class="custom-select-sm">
+                       {% if page == num_pages %}
+                            <option selected>{{num_pages}}</option> 
+                        {% else %}
+                            <option selected>{{page + 1}}</option> 
+                        {% endif %}
+                    </select>
+                    <select hidden name="Title" id="Title" class="custom-select-sm">
+                        <option selected>{{newsDict['filter_title']}}</option> 
+                    </select>
+                    <select hidden name="Category" id="Category" class="custom-select-sm">
+                        <option selected>{{newsDict['filter_category']}}</option> 
+                    </select>
+                    <select hidden name="Team" id="Team" class="custom-select-sm">
+                        <option selected>{{newsDict['filter_team']}}</option> 
+                    </select>
+                    <select hidden name="Sort" id="Sort" class="custom-select-sm">
+                        <option selected>{{newsDict['sort']}}</option> 
+                    </select>
+                    <select hidden name="search" id="search" class="custom-select-sm">
+                    <option selected>{{newsDict['search']}}</option> 
+                </select>
+                <select hidden name="SearchCategory" id="SearchCategory" class="custom-select-sm">
+                    <option selected>{{newsDict['search_category']}}</option> 
+                </select>
+                    <input type="submit" value=">>" class="btn btn-secondary ml-3" >
+                </form>
+            </div>
+        </span>
+    </div>
+</div>
+
+<button onclick="topFunction()" id="scroll_top_button" title="Scroll Back to Top">Top</button>
+
+<style>
+
+    #news_table{
+        margin: 0px auto;
+        background-color: #ff9e9e;
+    }
+
+    #news_table tr:nth-child(even){
+        background-color: #bf0a0a;
+    }
+    #
+    #paginationActive {
+        background-color: #ff9e9e;
+    }
+
+</style>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+

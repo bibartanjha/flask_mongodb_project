@@ -1,0 +1,54 @@
+{% extends 'index.html' %}
+
+
+{% block head %}
+<title>EE461L: Log-in</title>
+{% endblock %}
+
+{% block body %}
+
+<div class ="container" id="loginpage">
+	{% if t %}
+	<div class ="alert alert-success" style="margin-top: 20px">
+		<h6>{{t}}</h6>
+	</div>
+	{% endif %}
+
+	{% if f %}
+	<div class ="alert alert-danger" style="margin-top: 20px">
+		<h6>{{f}}</h6>
+	</div>
+	{% endif %}
+
+	<div class="container p-5">
+		<h4>LOG IN</h4>
+		<div class="container" style="text-align: center; width:500px;">
+			<form action="/account" method="post">
+				<div class="item" style="margin-bottom:5px">
+					<p>Email: </p>
+					<input type="email" name="log_email" id="login_email" required autofocus>
+				</div>
+				<div class="item" style="margin-top:5px">
+					<p>Password: </p>
+					<input type="password" name="log_pass" id="login_pass" required>
+				</div>
+				<div class="item" style="padding-top:5px;">
+					<button type="submit" id="loginButton" value="Log In">Log In</button>
+				</div>
+
+				<div class="item" style="margin-top:40px;">
+					<a href='/signup'>Don't have an account? Sign up here!</a>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<style>
+	h4, h6 {
+		text-align: center; 
+		font-family: 'Ubuntu';
+		margin-bottom: 35px;
+	}
+</style>
+
+{% endblock %}

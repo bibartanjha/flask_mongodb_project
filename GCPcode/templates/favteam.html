@@ -1,0 +1,239 @@
+{% extends 'index.html' %}
+
+{% block head %}
+<style>
+#scroll_top_button {
+    /* display: none; */
+    position: fixed;
+    bottom: 0px;
+    right: 10px;
+    z-index: 99;
+    border: none;
+    outline: none;
+    background-color: green;
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
+#scroll_top_button:hover {
+    background-color: #d0f2a0
+}
+</style>
+<title>EE461L: Favorite Team</title>
+{% endblock %}
+
+
+{% block body %}
+
+<button onclick="topFunction()" id="scroll_top_button" title="Scroll Back to Top">Top</button>
+
+
+    {% if message: %}
+        <div class ="alert alert-danger" style="margin-top: 20px">
+		<h2>{{message}}</h2>
+	    </div>
+    {% endif %}
+
+<div class="jumbotron bg-success  text-white border border-success" style="text-align: center">
+    <h1 class = "display-3 bg-success fluid rounded text-white " style="font-family:'Ubuntu';">My Favorite Teams</h1>
+            <p class=" text-white" style="font-family:'Ubuntu';">This page is where you can view the stats of your favorite teams!</p>
+
+</div>
+
+
+<div class="container p-3 my-3 bg-dark">
+<div class="form-group pb-2">
+<form action="/addFavTeam" method="POST" style="text-align: center">
+    <label class="text-white mr-1" style="font-family:'Ubuntu';">select a team</label>
+    <select name="favteambutton" class="custom-select-sm text-inline">
+
+        <option value="" selected disabled hidden></option>
+<!--        <option selected>{{player}}</option>-->
+        {% for team in teamList %}
+            <option>{{team.Name}}</option>
+       {% endfor %}
+    </select>
+    <button type="submit" name="favteambutton" class="btn btn-success ml-3" style="font-family:'Ubuntu';">Add</button>
+    <h5 class="text-white" style="font-family:'Ubuntu';">OR</h5>
+
+
+    <input type="text" class="mb-2 form-control-sm" name="favteambutton" id="favteambutton" placeholder="Enter a team">
+    <button type="submit" class="btn btn-success ml-3" style="font-family:'Ubuntu';">Add</button>
+
+</form>
+</div>
+</div>
+
+
+
+<div class="container justify-content-center">
+    <div class="card-columns">
+
+        {% for team in favTeams %}
+
+      <div class = "card text-center shadow-lg bg-success border-success " style=" font-family:'Ubuntu'; height: 1900px;  "  >
+        <img  src="/static/images/teamspage/{{team['Name']}}.jpg" alt="No picture found" width="250" height="250" class="mt-3">
+        <div class = "card-body ">
+
+      <h2 name="nameplate" class="card-header text-center bg-white rounded mb-2 text-black" name="{{team['Name']}}">{{team['Name']}}</h2>
+            <table  style="height: 600px;">
+
+      <tr>
+          <td style="font-weight:bold">League: </td>
+          <td>{{team['League']}}</td>
+      </tr>
+
+      <tr></divclass>
+          <td style="font-weight:bold">Location: </td>
+          <td>{{team['Location']}}</td>
+      </tr>
+
+      <tr>
+            <td style="font-weight:bold">Year Founded: </td>
+            <td>{{team['Year Founded']}}</td>
+        </tr>
+
+        <tr>
+            <td style="font-weight:bold">Conference: </td>
+            <td>{{team['Conference']}}</td>
+        </tr>
+
+
+        {% if team['League'] == "NBA" %}
+        <tr>
+            <td style="font-weight:bold">Division: </td>
+            <td>{{team['Division']}}</td>
+        </tr>
+
+        <tr>
+            <td style="font-weight:bold">2019-2020 Wins: </td>
+            <td>{{team['2019-2020: Wins']}}</td>
+        </tr>
+
+        <tr>
+            <td style="font-weight:bold">2019-2020 Losses: </td>
+            <td>{{team['2019-2020: Losses']}}</td>
+        </tr>
+
+        <tr>
+            <td style="font-weight:bold">2019-2020 PCT: </td>
+            <td>{{team['2019-2020: PCT']}}</td>
+        </tr>
+
+        <tr>
+            <td style="font-weight:bold">2019-2020 Conference Rank: </td>
+            <td>{{team['2019-2020: Conference Rank']}}</td>
+        </tr>
+
+        <tr>
+            <td style="font-weight:bold">2019-2020 Division Rank: </td>
+            <td>{{team['2019-2020: Division Rank']}}</td>
+        </tr>
+
+        <tr>
+            <td style="font-weight:bold">Arena: </td>
+            <td>{{team['Arena']}}</td>
+        </tr>
+
+        <tr>
+            <td style="font-weight:bold">Owner: </td>
+            <td>{{team['Owner']}}</td>
+        </tr>
+        {% endif %}
+
+        <tr>
+            <td style="font-weight:bold">Head Coach: </td>
+            <td>{{team['Coach']}}</td>
+        </tr>
+
+        <tr >
+
+           {% if team['League'] == "NBA" %}
+            <td style="font-weight:bold">Championships: </td>
+            {% else %}
+           <td style="font-weight:bold"># of Championships: </td>
+            {% endif %}
+            <td><table class="table table-light table-responsive">
+
+                {% if team['League'] == "NBA" %}
+{% for item in champ[loop.index-1] %}
+                    <tr >
+
+                        <td>{{item}}</td>
+
+                    </tr>
+ {% endfor %}
+
+                {% else %}
+                    <tr>
+                        <td>{{champ[loop.index-1]}}</td>
+                    </tr>
+                {% endif %}
+
+                </table>
+            </td>
+        </tr>
+
+        <!--<tr>
+            <td style="font-weight:bold">Team Roster</td>
+            <td>
+
+                <table class="card-table table-light table-responsive">
+
+                    {% for player in roster[loop.index-1] %}
+                <tr>
+                    <td>{{player}}</td>
+                </tr>
+                {% endfor %}
+
+                </table>
+            </td>
+
+        </tr>
+-->
+
+        <tr>
+            <td style="font-weight:bold">Facebook: </td>
+            <td><a href={{team['Facebook']}}>Facebook Link</a></td>
+        </tr>
+
+        <tr >
+            <td style="font-weight:bold">Instagram: </td>
+            <td><a href={{team['Instagram']}}>Instagram Link</a></td>
+        </tr>
+
+        <tr >
+            <td style="font-weight:bold">Twitter: </td>
+            <td><a href={{team['Twitter']}}>Twitter Link</a></td>
+        </tr>
+
+        <tr>
+                    <td style="font-weight:bold">Team Instance Page:</td>
+                    <td>
+                        <form action="/TeamInstancePage" method="POST">
+                        <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                        <option selected>{{team['Name']}}</option>
+                        </select>
+                        <input type="submit" value="Team Page" class="btn btn-primary ml-3" />
+                        </form></td>
+        </tr>
+
+
+            </table>
+            <form action="/removeFavTeam" method="POST" name="removebutton" >
+                        <button type="submit" name="removebutton" value="{{team['Name']}}" class="btn btn-danger btn-sm ml-3 mt-3">remove</button>
+                        </form>
+
+
+       </div>
+      </div>
+
+ {% endfor %}
+    </div>
+  </div>
+
+
+{% endblock %}

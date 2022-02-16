@@ -1,0 +1,275 @@
+{% extends 'index.html' %}
+
+{% block head %}
+<title>{{team['Name']}}</title>
+{% endblock %}
+
+{% block body %}
+<div class="container" style="text-align: center;" id="teamspage">
+	<h2><b>{{team['Name']}}</b></h2>
+
+    <div id="demo" class="carousel slide" data-ride="carousel" style="margin-top:20px">
+      <ul class="carousel-indicators">
+        <li data-target="#demo" data-slide-to="0" class="active"></li>
+        <li data-target="#demo" data-slide-to="1"></li>
+        <li data-target="#demo" data-slide-to="2"></li>
+        <li data-target="#demo" data-slide-to="3"></li>
+      </ul>
+
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="/static/images/teamspage/{{ team['Name'] }}.jpg" alt="Image 1" width="200" height="200">
+        </div>
+        <div class="carousel-item">
+            <img src="/static/images/teamspage/{{ team['Name'] }} 2.jpg" alt="Image 2" width="200" height="200">
+        </div>
+        <div class="carousel-item">
+            <img src="/static/images/teamspage/{{ team['Name'] }} 3.jpg" alt="Image 3" width="200" height="200">
+        </div>
+        <div class="carousel-item">
+            <img src="/static/images/teamspage/{{ team['Name'] }} 4.jpg" alt="Image 4" width="200" height="200">
+        </div>
+    </div>
+
+    <a class="carousel-control-prev" href="#demo" data-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </a>
+    <a class="carousel-control-next" href="#demo" data-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </a>
+    </div>
+
+    <h3 style="margin-top:40px"><b><u>Links</u></b></h3>
+    <div class="row">
+            <div class="col" style="width:400px">
+                <h4 style="margin-top:40px"><b>Players Pages</b></h4>
+                {% for player in players_in_db %}
+                <span>
+                    <form action="/PlayerInstancePage" method="POST">
+                        <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                            <option selected>{{player}}</option>
+                        </select>
+                        <input type="submit" value="{{player}}" class="btn btn-secondary ml-3" id="PlayersOutButton"/>
+                    </form>
+                </span>
+                {% endfor %}
+                {% if (players_in_db|length) == 0  %}
+                    <h6>This team has no featured players. Below are some teams who do.</h6>
+                    <span>
+                        <form action="/TeamInstancePage" method="POST">
+                            <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                                <option selected>76ers</a> 
+                            </select>
+                            <input type="submit" value="76ers" class="btn btn-secondary ml-3" id="PTeamButton" />
+                        </form>
+                    </span>
+                    <span>
+                        <form action="/TeamInstancePage" method="POST">
+                            <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                                <option selected>Bucks</a> 
+                            </select>
+                            <input type="submit" value="Bucks" class="btn btn-secondary ml-3" id="PTeamButton" />
+                        </form>
+                    </span>
+                    <span>
+                        <form action="/TeamInstancePage" method="POST">
+                            <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                                <option selected>Bulls</a> 
+                            </select>
+                            <input type="submit" value="Bulls" class="btn btn-secondary ml-3" id="PTeamButton" />
+                        </form>
+                    </span>
+                {% endif %}
+            </div>
+            <div class="col" style="width:400px">
+                <h4 style="margin-top:40px"><b>News Pages</b></h4>
+                {% for i in range(articles| length) %}
+                <span>
+                    <form action="/NewsInstancePage" method="POST">
+                        <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                            <option selected>{{articles[i]['Title']}}</a> 
+                        </select>
+                        <input type="submit" value="{{articles[i]['Title']}}" class="btn btn-secondary ml-3" id="PTeamButton" />
+                    </form>
+                </span>
+                {% endfor %}
+                {% if (articles| length) == 0 %}
+                    <h6>This team has no featured articles. Below are some teams who do.</h6>
+                    <span>
+                        <form action="/TeamInstancePage" method="POST">
+                            <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                                <option selected>Magic</a> 
+                            </select>
+                            <input type="submit" value="Magic" class="btn btn-secondary ml-3" id="PTeamButton" />
+                        </form>
+                    </span>
+                    <span>
+                        <form action="/TeamInstancePage" method="POST">
+                            <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                                <option selected>Rockets</a> 
+                            </select>
+                            <input type="submit" value="Rockets" class="btn btn-secondary ml-3" id="PTeamButton" />
+                        </form>
+                    </span>
+                    <span>
+                        <form action="/TeamInstancePage" method="POST">
+                            <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                                <option selected>Nuggets</a> 
+                            </select>
+                            <input type="submit" value="Nuggets" class="btn btn-secondary ml-3" id="PTeamButton" />
+                        </form>
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col" style="width:400px">
+                <h4 style="margin-top:40px"><b>Social Media</b></h4>
+                <span>
+                    {% if team['Facebook'] == "" %}
+                        <a href="#" class="fa fa-facebook"></a>
+                    {% else %}
+                        <a href="{{team['Facebook']}}" class="fa fa-facebook"></a>
+                    {% endif %}
+                    </span>
+                    <span>
+                    {% if team['Twitter'] == "" %}
+                        <a href="#" class="fa fa-twitter"></a>
+                    {% else %}
+                        <a href="{{team['Twitter']}}" class="fa fa-twitter"></a>
+                    {% endif %}
+                    </span>
+                    <span>
+                    {% if team['Instagram'] == "" %}
+                        <a href="#" class="fa fa-instagram"></a>
+                    {% else %}
+                        <a href="{{team['Instagram']}}" class="fa fa-instagram"></a>
+                    {% endif %}
+                </span>
+            </div>
+            <div class="col" style="width:400px">
+                <h4 style="margin-top:40px"><b>Other</b></h4>
+                <span><a class="btn btn-secondary ml-3" id="TWikiButton" href="{{team['Wikipedia']}}" role="button">Wikipedia</a></span>
+                <span>
+                    <form method="post" action="/addFavTeam">
+                        <button type="submit" id="addTbutton" name="favteambutton" value="{{team['Name']}}">Add to Favorites</button>
+                    </form>
+                </span>
+            </div>
+        </div>
+
+
+    <h3 style="margin-top:50px"><b><u>Information</u></b></h3>
+
+    <div class="row">
+        <div class="col">
+            <h4 style="margin-top:20px"><b>General</b></h4>
+            <table style="width:400px">
+                <tr>
+    				<td style="font-weight: bold">League</td>
+    				<td>{{team['League']}}</td>
+    			</tr>
+                <tr>
+    				<td style="font-weight: bold">Location</td>
+    				<td>{{team['Location']}}</td>
+    			</tr>
+                <tr>
+    				<td style="font-weight: bold">Year Founded</td>
+    				<td>{{team['Year Founded']}}</td>
+    			</tr>
+    			<tr>
+    				<td style="font-weight: bold">Conference</td>
+    				<td>{{team['Conference']}}</td>
+    			</tr>
+    			{% if team['League'] == 'NBA' %}
+                <tr>
+                    <td style="font-weight:bold">Division</td>
+                    <td>{{team['Division']}}</td>
+                </tr> 
+            	{% endif %}
+    			{% if team['Coach'] != ' ' %}
+            	<tr>
+                	<td style="font-weight:bold">Coach</td>
+                	<td>{{team['Coach']}}</td>
+            	</tr>
+            	{% endif %}
+            </table>
+        </div>
+        
+        <div class="col">
+            <h4 style="margin-top:20px"><b>2019-2020 Stats</b></h4>
+            <table style="width:400px">
+                <tr>
+                    <td style="font-weight:bold">Wins</td>
+                    {% if team['League'] == 'NBA' %}
+                    	<td>{{team['2019-2020: Wins']}}</td>
+                	{% else %}
+                		<td>{{team['2019-2020 Wins']}}</td>
+                    {% endif %}
+                </tr> 
+                <tr>
+                    <td style="font-weight:bold">Losses</td>
+                    {% if team['League'] == 'NBA' %}
+                    	<td>{{team['2019-2020: Losses']}}</td>
+                	{% else %}
+                		<td>{{team['2019-2020 Losses']}}</td>
+                    {% endif %}
+                </tr> 
+                <tr>
+                    <td style="font-weight:bold">PCT</td>
+                    {% if team['League'] == 'NBA' %}
+                    	<td>{{team['2019-2020: PCT']}}</td>
+                	{% else %}
+                		<td>{{team['2019-2020 PCT']}}</td>
+                    {% endif %}
+                </tr> 
+                <tr>
+                    <td style="font-weight:bold">Conference Rank</td>
+                    {% if team['League'] == 'NBA' %}
+                    	<td>{{team['2019-2020: Conference Rank']}}</td>
+                	{% else %}
+                		<td>{{team['2019-2020 Conference Rank']}}</td>
+                    {% endif %}
+                </tr> 
+            </table>
+        </div>
+    </div>
+    <div class="row" style="padding-bottom:50px">
+        <div class="col">
+            <h4 style="margin-top:20px"><b>Current Roster</b></h4>
+            <table style="width:400px">
+            	{% for player in roster %}
+                <tr>
+                    <td>{{player}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            
+        </div>
+        <div class="col">
+            {% if team['League'] == 'NBA' %}
+            <h4 style="margin-top:20px"><b>Other Info</b></h4>
+            <table style="width:400px">
+                <tr>
+                    <td style="font-weight:bold">Arena</td>
+                    <td>{{team['Arena']}}</td>
+                </tr> 
+                <tr>
+                    <td style="font-weight:bold">Owner</td>
+                	<td>{{team['Owner']}}</td>
+                </tr> 
+            </table>
+            {% endif %}
+
+            
+        </div>
+    </div>
+</div>
+<style>
+    h2, h3, h4 {
+        font-family: 'Ubuntu';
+    }
+</style>
+
+
+{% endblock %}

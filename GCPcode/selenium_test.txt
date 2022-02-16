@@ -1,0 +1,59 @@
+
+
+Now testing: Navbar links
+URL https://teame9.herokuapp.com/Players has been reached.
+URL https://teame9.herokuapp.com/Teams has been reached.
+URL https://teame9.herokuapp.com/News has been reached.
+URL https://teame9.herokuapp.com/AboutPage has been reached.
+URL https://teame9.herokuapp.com/Fantasy has been reached.
+URL https://teame9.herokuapp.com/Franchise_Leaders has been reached.
+URL https://teame9.herokuapp.com/Coaches has been reached.
+URL https://teame9.herokuapp.com/Year has been reached.
+URL https://teame9.herokuapp.com/favteam has been reached.
+URL https://teame9.herokuapp.com/favplayer has been reached.
+URL https://teame9.herokuapp.com/comparison has been reached.
+URL https://teame9.herokuapp.com/Settings has been reached.
+
+
+Now testing: Scroll and Pagination on Model pages
+Was able to reach the last page: https://teame9.herokuapp.com/Players?page=17&Name=none&Status=none&Position=none&Team=none&Sort=None.
+Was able to reach the last page: https://teame9.herokuapp.com/Teams?page=7&Name=None&League=None&Conference=None&Division=None&Sort=None.
+
+
+Now testing: Ability to log in and log out.
+SUCCESS: Can log-in with 'seleniumtest@gmail.com' + 'password' and log out.
+
+
+Now Testing: Ability to add and remove a favorite player.
+SUCCESS: Can add and remove a player.
+
+
+Now testing: Random Games shown on homepage.
+SUCCESS: First game shown on homepage before refreshing: Toronto Raptors vs Memphis Grizzlies.
+ First game shown on homepage after refreshing: Miami Heat vs Indiana Pacers.  Games shown on homepage are chosen at random.
+
+
+Now Testing: Buttons on Franchise Leaders and Archive page.
+SUCCESS: Able to traverse through each team.
+SUCCESS: Was able to traverse through the decades and years.
+
+
+Now Testing: CSS attributes.
+SUCCESS: Log-In button is in correct position; absolute and 10px from right of screen.
+SUCCESS: Homepage table class is centered.
+SUCCESS: Homepage table is correct width.
+SUCCESS: Homepage table has centered text.
+SUCCESS: Player instance is a card.
+SUCCESS: Player instance includes all necessary table information.
+SUCCESS: Images on Player Instance page are shown in a carousel.
+SUCCESS: An image is presented on the Player Instance page.
+SUCCESS: Style amongst the players, teams, and news instance pages is consistent.
+SUCCESS: Log-in page will take in input of type email and password.
+
+
+Now Testing: Search Function.
+SUCCESS: Searched James and found expected results.
+SUCCESS: Filtered by Position:Forward. All results fit the expected criteria.
+
+
+Done testing GUI and front end.

@@ -1,0 +1,139 @@
+{% extends 'index.html' %}
+
+{% block head %}
+<style>
+#scroll_top_button {
+    /* display: none; */
+    position: fixed;
+    bottom: 0px;
+    right: 10px;
+    z-index: 99;
+    border: none;
+    outline: none;
+    background-color: #f59003;
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
+#scroll_top_button:hover {
+    background-color: #555
+}
+h1, h2, h3, h4 {
+    font-family: 'Ubuntu';
+}
+</style>
+<title>EE461L: About</title>
+{% endblock %}
+
+
+{% block body %}
+
+<div class="jumbotron bg-warning text-white" style="text-align: center">
+    <h1 style = "color: white">About</h1>
+</div>
+<div class="container-fluid" style="padding-left:50px; padding-right:50px; padding-top:50px; padding-bottom: 20px;">
+	<h4>Group Name: Team E9</h4>
+
+	<h6>Description</h6>
+	<p>
+	This site provides interesting and useful information on the NBA and the WNBA. Users can interact with this site to search up their favorite NBA players and teams. Users can also be kept up to date on the latest basketball scores and news. 
+	</p>
+	<p>
+	The purpose of this site is to serve as a tool that NBA and WNBA fans can use to stay up-to-date regarding their favorite players and teams as well as the latest basketball stats and news. 
+	</p>
+	<p>
+	The intended users are NBA and WNBA fans, or anyone who wants to learn more about these leagues.
+	</p>
+
+	<h6>Data</h6>
+	<ul>
+		<li><a href="https://sportsdata.io/developers/api-documentation/nba">SportsRadar API</a></li>
+		<li><a href="https://github.com/swar/nba_api">API-NBA</a></li>
+		<li><a href="https://developer.sportradar.com/docs/read/basketball/WNBA_v3#wnba-api-map">Sportradar: WNBA API</a></li>
+	</ul>
+	<p>We are obtaining the data from existing NBA/WNBA and news APIs and using MongoDB as our database. The data is being requested through our main.py. The user may search up a certain player or team and our code requests the information about that searched element from these API’s and then displays the information to the user. For the user’s favorite players and teams information, they will be stored in MongoDB so that it is saved on their Favorite Player and Favorite Team pages for their specific account that they log in with on our website.  
+	</p>
+
+	<h6>Tools</h6>
+	<p>
+	API-NBA: We are using the API-NBA to grab information about NBA players and teams.</p>
+	<p>WNBA-API: We are using the WNBA API provided by sportradar to grab information about WNBA players and teams.</p>
+	<p>ESPN API: We are using the ESPN API to grab news about the NBA and WNBA, as well as other statistics and season/trade predictions.</p>
+	<p>MongoDB: We are using MongoDB to store all the information we have gathered from our APIs, so we can easily access them via our program and the web.</p>
+	<p>Heroku: We are using Heroku to host our website, so anyone can have access to it and be able to use the website.</p>
+	<p>Flask: We are using Flask to have our python code work alongside the code for our static website.</p>
+	<p>Bootstrap: We are using Bootstrap CSS to add more stylization to our website, and make it visually appealing to the user.
+	</p>
+
+	<a href="https://github.com/UT-SWLab/TeamE9">Our Github Repository</a>
+
+
+	<h6>Group Nembers</h6>
+	<table>
+		<tr>
+			<th>
+				Name
+			</th>
+			<th>
+				Picture
+			</th>
+			<th>
+				Information
+			</th>
+		</tr>
+		<tr>
+			<td>
+				Morgan Murrell
+			</td>
+			<td>
+				<img src="/static/images/about_images/morgan.png" alt="morgan">
+			</td>
+			<td>
+				<p>I’m a 5th year ECE student, and my primary tech core is Computer Architecture and Embedded Systems. As of right now, my primary responsibilities are setting up the front page of the website, the settings page, and the log-in/sign-up page.
+				</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Alina Nguyen 
+			</td>
+			<td>
+				<img src="/static/images/about_images/alina.png" alt="alina">
+			</td>
+			<td>
+				<p>I am a 4th year ECE student and my primary tech core is Software Design and Implementation. I am also minoring in Korean. As of right now, my responsibilities include setting up and designing the favorite player page, favorite team page, and also the comparison page so that the user can compare the stats of certain players and teams.</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Bibartan Jha
+			</td>
+			<td>
+				<img src="/static/images/about_images/bibartan.png" alt="bibartan">
+			</td>
+			<td>
+				<p>I am a 4th year ECE student, and my primary tech core is Software Design & Implementation. As of right now, my primary responsibilities in this project are setting up the players page, the teams page, the news page, and the fantasy team simulator page.</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Andrew Brown
+			</td>
+			<td>
+				<img src="/static/images/about_images/andrew.png" alt="andrew">
+			</td>
+			<td>
+				<p>I am a 4th year ECE student, and my primary tech core is Software Design & Implementation. My primary responsibilities in this project are displaying the franchise leaders for each team, showing the coaches for each team, and displaying the past basketball champions. 
+				</p>
+			</td>
+		</tr>
+
+	</table>
+</div>
+
+<button onclick="topFunction()" id="scroll_top_button" title="Scroll Back to Top">Top</button>
+
+{% endblock %}

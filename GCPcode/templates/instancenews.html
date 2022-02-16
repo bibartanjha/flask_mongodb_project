@@ -1,0 +1,156 @@
+{% extends 'index.html' %}
+
+{% block head %}
+<title>{{article['Title']}}</title>
+
+{% endblock %}
+
+{% block body %}
+<div class="container" style="text-align: center;" id="newspage">
+	<h2 style="margin-top:20px"><b>"{{article['Title']}}"</b></h2>
+
+  {% if article['Team'] == 'No Team'%}
+
+  <img src="/static/images/NBA_logo.jpeg" alt="NBA logo" height="200">
+
+  {% else %}
+
+  <div id="demo" class="carousel slide" data-ride="carousel" style="margin-top:40px">
+    <ul class="carousel-indicators">
+      <li data-target="#demo" data-slide-to="0" class="active"></li>
+      <li data-target="#demo" data-slide-to="1"></li>
+      <li data-target="#demo" data-slide-to="2"></li>
+      <li data-target="#demo" data-slide-to="3"></li>
+    </ul>
+
+
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="/static/images/teamspage/{{ article['Team'] }}.jpg" alt="Image 1" width="200" height="200">
+      </div>
+      <div class="carousel-item">
+        <img src="/static/images/teamspage/{{ article['Team'] }} 2.jpg" alt="Image 2" width="200" height="200">
+      </div>
+      <div class="carousel-item">
+        <img src="/static/images/teamspage/{{ article['Team'] }} 3.jpg" alt="Image 3" width="200" height="200">
+      </div>
+      <div class="carousel-item">
+        <img src="/static/images/teamspage/{{ article['Team'] }} 4.jpg" alt="Image 4" width="200" height="200">
+      </div>
+    </div>
+
+    <a class="carousel-control-prev" href="#demo" data-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </a>
+    <a class="carousel-control-next" href="#demo" data-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </a>
+  </div>
+
+  {% endif %} 
+  
+  <h3 style="margin-top:40px"><b><u>Links</u></b></h3>
+  <div class="row">
+      <div class="col" style="width:400px">
+      <h4 style="margin-top:40px"><b>Players Pages</b></h4>
+      {% for player in players_in_db %}
+            <span>
+                <form action="/PlayerInstancePage" method="POST">
+                    <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                        <option selected>{{player}}</option>
+                    </select>
+                    <input type="submit" value="{{player}}" class="btn btn-secondary ml-3" id="PlayersOutButton"/>
+                </form>
+            </span>
+      {% endfor %}
+      {% if (players_in_db|length) == 0  %}
+          <h6>This article's player is not on this site. Below are some articles whose players are on this site.</h6>
+          <span>
+              <form action="/NewsInstancePage" method="POST">
+                  <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                      <option selected>Anthony Davis, LeBron James Probable For Sunday</a> 
+                  </select>
+                  <input type="submit" value="Anthony Davis, LeBron James Probable For Sunday" id="NewsOutButton" />
+              </form>
+          </span>
+          <span>
+              <form action="/NewsInstancePage" method="POST">
+                  <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                      <option selected>Giannis Antetokounmpo Should Play In Game 5</a> 
+                  </select>
+                  <input type="submit" value="Giannis Antetokounmpo Should Play In Game 5" id="NewsOutButton" />
+              </form>
+          </span>
+          <span>
+              <form action="/NewsInstancePage" method="POST">
+                  <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                      <option selected>Kemba Walker Dealt With Lingering Injuries In The Bubble</a> 
+                  </select>
+                  <input type="submit" value="Kemba Walker Dealt With Lingering Injuries In The Bubble" id="NewsOutButton" />
+              </form>
+          </span>
+      {% endif %}
+      </div>
+  </div>
+  <div class="row">
+    <div class="col" style="width:400px">
+          <h4 style="margin-top:40px"><b>Team Page</b></h4>
+          <span>
+            {% if article['Team'] == 'No Team' %}
+
+            <button id="NoTeam"><a href='/Teams'>No Team Available</a></button>
+
+            {% else %}
+
+              <form action="/TeamInstancePage" method="POST">
+                  <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                      <option selected>{{article['Team']}}</a> 
+                  </select>
+                  <input type="submit" value="{{article['Team']}}" class="btn btn-secondary ml-3" id="PTeamButton" />
+              </form>
+
+            {% endif %}
+          </span>
+      </div>
+
+      <div class="col" style="width:400px">
+          <h4 style="margin-top:40px"><b>Other</b></h4>
+          <span>
+            <a id="NewsSourceButton" class="btn btn-secondary ml-3" href="{{article['OriginalSourceUrl']}}" role="button">News Source</a>
+            </span>
+      </div>
+    </div>
+<h3 style="margin-top:40px"><b><u>Information</u></b></h3>
+<div class="row">
+  <div class="col">
+  	<h3 style="margin-top:40px"><b>Details</b></h3>
+  	<table style="width:300px">
+  		<tr>
+  			<td style="font-weight: bold">Date Posted</td>
+  			<td>{{article['Updated'][:10]}}</td>
+  		</tr>
+  		<tr>
+  			<td style="font-weight: bold">News Topic</td>
+  			<td>{{article['Categories']}}</td>
+  		</tr>
+      <tr>
+        <td style="font-weight: bold">Article Team</td>
+        <td>The {{article['Team']}}</td>
+      </tr>
+  	</table>
+
+    <h3 style="margin-top:40px"><b>Article Author</b></h3>
+    <figure>
+      <img src="/static/images/newspage/{{ article['OriginalSource'] }}.jpg" alt="No picture found" width="120" height="120" />
+      <figcaption>{{article['OriginalSource']}}</figcaption>
+    </figure>
+  </div>
+  <div class="col">
+    <h3 style="margin-top:40px; text-align:center; width:400px;"><b>Article Content</b></h3>
+    <p style="width:400px; text-align: justify;">{{article['Content']}}</p>
+  </div>
+</div>
+
+
+</div>
+{% endblock %}

@@ -1,0 +1,240 @@
+{% extends 'index.html' %}
+
+
+{% block head %}
+<title>{{player['Name']}}</title>
+{% endblock %}
+{% block body %}
+
+<div class="container" style="text-align: center;" id="playerspage">
+    <div class="grid-item">
+        <h2><b>{{player['Name']}}</b></h2>
+        <div id="demo" class="carousel slide" data-ride="carousel" style="margin-top:20px">
+          <ul class="carousel-indicators">
+            <li data-target="#demo" data-slide-to="0" class="active"></li>
+            <li data-target="#demo" data-slide-to="1"></li>
+            <li data-target="#demo" data-slide-to="2"></li>
+            <li data-target="#demo" data-slide-to="3"></li>
+          </ul>
+  
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="/static/images/playerspage/{{ player['Name'] }}.jpg" alt="Image 1" width="200" height="200">
+            </div>
+            <div class="carousel-item">
+              <img src="/static/images/playerspage/{{ player['Name'] }} 2.jpg" alt="Image 2" width="200" height="200">
+            </div>
+            <div class="carousel-item">
+              <img src="/static/images/playerspage/{{ player['Name'] }} 3.jpg" alt="Image 3" width="200" height="200">
+            </div>
+            <div class="carousel-item">
+              <img src="/static/images/playerspage/{{ player['Name'] }} 4.jpg" alt="Image 4" width="200" height="200">
+            </div>
+        </div>
+  
+          <a class="carousel-control-prev" href="#demo" data-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+          </a>
+          <a class="carousel-control-next" href="#demo" data-slide="next">
+            <span class="carousel-control-next-icon"></span>
+          </a>
+        </div>
+
+        <h3 style="margin-top:50px"><b><u>Links</u></b></h3>
+        <div class="row">
+            <div class="col" style="width:400px">
+                <h4 style="margin-top:40px"><b>Team Page</b></h4>
+                <span>
+                    <form action="/TeamInstancePage" method="POST">
+                        <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                            <option selected>{{player['Team']}}</a> 
+                        </select>
+                        <input type="submit" value="{{player['Team']}}" class="btn btn-secondary ml-3" id="PTeamButton" />
+                    </form>
+                </span>
+            </div>
+            <div class="col" style="width:400px">
+                <h4 style="margin-top:40px"><b>News Pages</b></h4>
+                {% for i in range(articles| length) %}
+                <span>
+                    <form action="/NewsInstancePage" method="POST">
+                        <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                            <option selected>{{articles[i]['Title']}}</a> 
+                        </select>
+                        <input type="submit" value="{{articles[i]['Title']}}" class="btn btn-secondary ml-3" id="PTeamButton" />
+                    </form>
+                </span>
+                {% endfor %}
+                {% if (articles| length) == 0 %}
+                    <h6>This player has no articles. Below are some players who do.</h6>
+                    <span>
+                        <form action="/PlayerInstancePage" method="POST">
+                            <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                                <option selected>Anthony Davis</option>
+                            </select>
+                            <input type="submit" value="Anthony Davis" class="btn btn-secondary ml-3" id="PTeamButton" />
+                        </form>
+                    </span>
+                    <span>
+                        <form action="/PlayerInstancePage" method="POST">
+                            <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                                <option selected>Giannis Antetokounmpo</option>
+                            </select>
+                            <input type="submit" value="Giannis Antetokounmpo" class="btn btn-secondary ml-3" id="PTeamButton" />
+                        </form>
+                    </span>
+                    <span>
+                        <form action="/PlayerInstancePage" method="POST">
+                            <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                                <option selected>Russell Westbrook</option>
+                            </select>
+                            <input type="submit" value="Russell Westbrook" class="btn btn-secondary ml-3" id="PTeamButton" />
+                        </form>
+                    </span>
+                    <span>
+                        <form action="/PlayerInstancePage" method="POST">
+                            <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                                <option selected>Zion Williamson</option>
+                            </select>
+                            <input type="submit" value="Zion Williamson" class="btn btn-secondary ml-3" id="PTeamButton" />
+                        </form>
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col" style="width:400px">
+                <h4 style="margin-top:40px"><b>Social Media</b></h4>
+                {% if player['Facebook'] == "" and player['Instagram'] == "" and player['Twitter'] == ""%}
+                    <h6>None</h6>
+                {% else %}
+                <span>
+                    {% if not player['Facebook'] == "" %}
+                        <a href="{{player['Facebook']}}" class="fa fa-facebook"></a>
+                    {% endif %}
+                    </span>
+                    <span>
+                    {% if not player['Twitter'] == "" %}
+                        <a href="{{player['Twitter']}}" class="fa fa-twitter"></a>
+                    {% endif %}
+                    </span>
+                    <span>
+                    {% if not player['Instagram'] == "" %}
+                        <a href="{{player['Instagram']}}" class="fa fa-instagram"></a>
+                    {% endif %}
+                </span>
+                {% endif %}
+            </div>
+            <div class="col" style="width:400px">
+                <h4 style="margin-top:40px"><b>Other</b></h4>
+                <span>
+                    <a class="btn btn-secondary ml-3" id="PWikiButton" href="{{player['Wikipedia']}}" role="button">Wikipedia</a>
+                </span>
+                <span>
+                    <form method="post" action="/addFavPlayer">
+                        <button type="submit" name="favplayerbutton" value="{{player['Name']}}" id="addPbutton">Favorite!</button>
+                    </form>
+                </span>
+            </div>
+        </div>
+
+        <h3 style="margin-top:50px"><b><u>Information</u></b></h3>
+        <div class="row">
+            <div class="col">
+                <h4 style="margin-top:40px"><b>General</b></h4>
+                <table style="width:400px">
+                    <tr>
+                        <td style="font-weight:bold">Status</td>
+                        <td>{{player['Status']}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Years Active</td>
+                        <td>{{player['Start Year']}} - {{player['End Year']}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Team</td>
+                        <td>{{player['Team']}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">City</td>
+                        <td>{{player['City']}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Position</td>
+                        <td>{{player['Position']}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Jersey</td>
+                        <td>{{player['Jersey']}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col">
+                <h4 style="margin-top:40px"><b>Bio</b></h4>
+                <table style="width:400px">
+                    <tr>
+                        <td style="font-weight:bold">Birthday</td>
+                        <td>{{player['Birthday']}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Height (ft)</td>
+                        <td>{{player['Height (ft)']}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Weight</td>
+                        <td>{{player['Weight (lbs)']}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+            <h4 style="margin-top:40px"><b>Draft</b></h4>
+            <table style="width:400px">
+                <tr>
+                    <td style="font-weight:bold">School</td>
+                    <td>{{player['School']}}</td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold">Year</td>
+                    <td>{{player['Draft Year']}}</td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold">Round</td>
+                    <td>{{player['Draft Round']}}</td>
+                </tr>
+                <tr>
+                    <td style="font-weight:bold">Number</td>
+                    <td>{{player['Draft Number']}}</td>
+                </tr>
+            </table>
+            </div>
+            <div class="col">
+                <h4 style="margin-top:40px"><b>Stats</b></h4>
+                <table style="width:400px">
+                    <tr>
+                        <td style="font-weight:bold">PTS</td>
+                        <td>{{player['PTS']}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">AST</td>
+                        <td>{{player['AST']}}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">REB</td>
+                        <td>{{player['REB']}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>   
+    </div>
+</div>
+
+<style>
+    h2, h3, h4 {
+        font-family: 'Ubuntu';
+    }
+</style>
+
+
+{% endblock %}

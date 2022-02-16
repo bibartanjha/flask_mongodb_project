@@ -1,0 +1,190 @@
+{% extends 'index.html'%}
+
+{% block head %}
+<title>EE461L: Compare</title>
+{% endblock %}
+
+{% block body %}
+{% if message: %}
+        <div class ="alert alert-danger" style="margin-top: 20px">
+		<h2>{{message}}</h2>
+	    </div>
+    {% endif %}
+<div class="jumbotron bg-warning text-white border-secondary" style="text-align: center;">
+    <h1 class = "display-3 bg-warning fluid rounded text-white " style="font-family:'Ubuntu';">Compare</h1>
+    <p class=" text-white" style="font-family:'Ubuntu';" >This page is where you can compare the stats of selected teams and players!</p>
+</div>
+
+<div class="container bg-info">
+
+<h1 class="text-center text-white pt-3" style="font-family:'Ubuntu';">Team Comparisons</h1>
+
+<div class="container p-3 my-3 bg-dark">
+<div class="form-group pb-2">
+<form action="/addCompare" method="POST" style="text-align: center">
+
+    <select name="choices" class="custom-select-sm text-inline">
+        <option value="" selected disabled hidden></option>
+<!--        <option selected>{{player}}</option>-->
+        {% for team in teamList %}
+            <option>{{team.Name}}</option>
+       {% endfor %}
+    </select>
+    <button type="submit"  name="choices" style="font-family:'Ubuntu';" class="btn btn-light ml-3">Add</button>
+    <h5 class="text-white" style="font-family:'Ubuntu';">OR</h5>
+
+
+    <input type="text" class="mb-2 form-control-sm" name="choices" placeholder="Enter a team">
+    <button type="submit" style="font-family:'Ubuntu';" class="btn btn-light ml-3">Add</button>
+</form>
+</div>
+</div>
+
+
+<div class="container container-fluid bg-info">
+<div class="table-responsive">
+    <table class="table table-responsive table-bordered bg-light table-striped ">
+        <thead class="bg-dark text-white" style="font-family:'Ubuntu';">
+            <tr>
+                <th>Team Name</th>
+                <th>League</th>
+                <th>Location</th>
+                <th>Conference</th>
+                <th>Division</th>
+                <th>2019-2020 Wins</th>
+                <th>2019-2020 Losses</th>
+                <th>PCT</th>
+                <th>Conference Rank</th>
+                <th>Division Rank</th>
+                <th>Instance Page</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody style="font-family:'Ubuntu';">
+        {% for team in comparisonTeams %}
+        <tr>
+                <td>{{team['Name']}}</td>
+                <td>{{team['League']}}</td>
+                <td>{{team['Location']}}</td>
+                <td>{{team['Conference']}}</td>
+                <td>{{team['Division']}}</td>
+                <td>{{team['2019-2020: Wins']}}</td>
+                <td>{{team['2019-2020: Losses']}}</td>
+                <td>{{team['2019-2020: PCT']}}</td>
+                <td>{{team['2019-2020: Conference Rank']}}</td>
+                <td>{{team['2019-2020: Division Rank']}}</td>
+                <td>
+                    <form action="/TeamInstancePage" method="POST">
+                        <select hidden name="InstancePage" class="custom-select-sm">
+                        <option selected>{{team['Name']}}</option>
+                        </select>
+                        <input type="submit" value="Team Page" class="btn btn-primary ml-3" />
+                </form>
+                </td>
+                <td>
+                    <form action="/removeComparisonTeam" method="POST" name="removebutton" >
+                    <button type="submit" name="removebutton" value="{{team['Name']}}" style="font-family:'Ubuntu';" class="btn btn-danger btn-sm ml-3">remove team</button>
+                    </form>
+                </td>
+        </tr>
+       {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+</div>
+</div>
+
+<div class="bg-info container">
+<h1 class="text-center text-white mt-5  pt-3" style="font-family:'Ubuntu';">Player Comparisons</h1>
+<div class="container p-3 my-3 bg-dark">
+<div class="form-group pb-2 text-center">
+
+<form action="/addCompare" method="POST" style="text-align: center">
+
+    <select class="custom-select-sm text-inline" name="choices">
+        <option  value="" selected disabled hidden></option>
+        {% for person in playerList %}
+            <option>{{person.Name}}</option>
+       {% endfor %}
+    </select>
+
+    <button type="submit" name="choices" style="font-family:'Ubuntu';" class="btn btn-light ml-3}}">Add</button>
+
+    <h5 class="text-white" style="font-family:'Ubuntu';">OR</h5>
+
+    <input type="text" name="choices" class="mb-2 form-control-sm" placeholder="Enter a player">
+    <button type="submit"  name="choices" style="font-family:'Ubuntu';" class="btn btn-light ml-3">Add</button>
+
+
+</form>
+</div>
+</div>
+
+
+<div class="container container-fluid bg-info">
+    <div class="table-responsive">
+        <table class="table table-responsive table-bordered bg-light table-striped ">
+            <thead class="bg-dark text-white" style="font-family:'Ubuntu';">
+                <tr>
+                    <th>Player Name</th>
+                    <th>Status</th>
+                    <th>Team</th>
+                    <th>Position</th>
+                    <th>Jersey #</th>
+                    <th>Height</th>
+                    <th>Weight</th>
+                    <th>Draft Year</th>
+                    <th>Draft Round</th>
+                    <th>Draft Number</th>
+                    <th>Birthday</th>
+                    <th>Start Year</th>
+                    <th>End Year</th>
+                    <th>PTS</th>
+                    <th>AST</th>
+                    <th>REB</th>
+                    <th>Instance Page</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody style="font-family:'Ubuntu';">
+        {% for player in comparisonPlayers %}
+            <tr>
+                <td>{{player['Name']}}</td>
+                <td>{{player['Status']}}</td>
+                <td>{{player['Team']}}</td>
+                <td>{{player['Position']}}</td>
+                <td>{{player['Jersey']}}</td>
+                <td>{{player['Height (ft)']}}</td>
+                <td>{{player['Weight (lbs)']}}</td>
+                <td>{{player['Draft Year']}}</td>
+                <td>{{player['Draft Round']}}</td>
+                <td>{{player['Draft Number']}}</td>
+                <td>{{player['Birthday']}}</td>
+                <td>{{player['Start Year']}}</td>
+                <td>{{player['End Year']}}</td>
+                <td>{{player['PTS']}}</td>
+                <td>{{player['AST']}}</td>
+                <td>{{player['REB']}}</td>
+                <td>
+                    <form action="/PlayerInstancePage" method="POST">
+                        <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                        <option selected>{{player['Name']}}</option>
+                        </select>
+                        <input type="submit" value="Player Page" class="btn btn-primary ml-3" />
+                    </form>
+                </td>
+                <td>
+                   <form action="/removeComparisonPlayer" method="POST" name="removebutton" >
+                    <button type="submit" name="removebutton" value="{{player['Name']}}" class="btn btn-danger btn-sm ml-3">remove player</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+</div>
+    </div>
+{% endblock %}

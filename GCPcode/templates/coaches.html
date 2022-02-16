@@ -1,0 +1,139 @@
+{% extends 'index.html' %}
+
+{% block head %}
+
+<style>
+    h1, h2, h3, h4 {
+            font-family: 'Ubuntu';
+    }
+
+    body {text-align: center;}
+
+    #coachestable{
+        margin: 0px auto;
+        background-color: #ff9e9e;
+    }
+
+    #coachestable tr:nth-child(even){
+        background-color: #bf0a0a;
+    }
+</style>
+
+<title>Coaches</title>
+{% endblock %}
+
+{% block body %}
+<div class="mx-auto" style="width:100%">
+    <div class="jumbotron text-white" style="background-color: #bf0a0a; border-radius:0px; margin-bottom:0px;">
+        <h1 style = "color: white">Coaches</h1>
+        <br>
+        <h4 style = "color: white">Select a team below to learn about its coach</h4>
+        <span>
+        {% if coach_selected %}
+            <form action="/Coaches" method="GET">
+                <input style="color:#bf0a0a;" type="submit" value="See all teams" class="btn btn-secondary ml-3" id="CoachButton">
+            </form>
+        {% endif %}
+        </span>
+    </div>
+</div>
+
+{% if coach_selected %}
+<div class="container" id="coachpage">
+    <div class="grid-item">
+        <h2><b>{{coach['Coach Name']}}</b></h2>
+        <img name = "image" src="/static/images/coachespage/{{ coach['Coach Name'] }}.jpeg" alt="No picture found"  height="180">
+
+        <br><br>
+        <div class="row">
+            <div class="col">
+                <h4 style="margin-top:20px"><b>Info</b></h4>
+                <table id="coachestable" style="width:400px">
+                <tr>
+                    <td style="font-weight: bold">Team</td>
+                    <td>{{coach['Location']}} {{coach['Team Name']}}</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold">Coach Type</td>
+                    <td>{{coach['Coach Type']}}</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold">Coaching Career</td>
+                    <td>{{coach['Coaching Career Start Year']}}-Present</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold">Coach for {{coach['Team Name']}}</td>
+                    <td>{{coach['Start Year with Team']}}-Present</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold">Career Highlights as Coach</td>
+                    <td>{{coach['Career Highlights as Coach']}}</td>
+                </tr>
+            </table>
+        </div>
+            <div class="col" style="width:400px">
+                <h4 style="margin-top:40px"><b>Links</b></h4>
+                <span>
+                    <form action="/TeamInstancePage" method="POST">
+                        <select hidden name="InstancePage" id="InstancePage" class="custom-select-sm">
+                            <option selected>{{coach['Team Name']}}</a> 
+                        </select>
+                        <input style="color:#bf0a0a;" type="submit" value="Team Page" class="btn btn-secondary ml-3" id="PTeamButton" />
+                    </form>
+                </span>
+                <span><a style="color:#bf0a0a;" class="btn btn-secondary ml-3" id="TWikiButton" href="{{coach['Wikipedia']}}" role="button">Wikipedia</a></span>
+
+                <br>
+                <h4 style="margin-top:40px"><b>Social Media</b></h4>
+                {% if coach['Facebook'] == "" and coach['Instagram'] == "" and coach['Twitter'] == ""%}
+                    <h6>None</h6>
+                {% else %}
+                <span>
+                    {% if not coach['Facebook'] == "" %}
+                        <a href="{{coach['Facebook']}}" class="fa fa-facebook"></a>
+                    {% endif %}
+                    </span>
+                    <span>
+                    {% if not coach['Twitter'] == "" %}
+                        <a href="{{coach['Twitter']}}" class="fa fa-twitter"></a>
+                    {% endif %}
+                    </span>
+                    <span>
+                    {% if not coach['Instagram'] == "" %}
+                        <a href="{{coach['Instagram']}}" class="fa fa-instagram"></a>
+                    {% endif %}
+                </span>
+                {% endif %}
+            </div>
+        </div>
+	{% else %}
+	<div class="container" id="coaches_images">
+	{% for coach in coaches_documents %}
+	    <form action="/Coaches" method="POST">
+	        <table style="width: 120px; display: inline; background-color: transparent; padding: 10px;">
+		        <tr>
+			        <td style="background-color: transparent; padding: 0px;">
+			            <input type="image" id="{{coach['Team Name']}}" style="margin: 0px;" src="/static/images/teamspage/{{ coach['Team Name'] }}.jpg" alt="No picture found" width="120" height="120">
+			        </td>
+			        <tr style="background-color: transparent;">
+				        <td id="coachlabel" style="background-color: transparent;">
+				            <select hidden name="Coach" id="Coach" class="custom-select-sm">
+				                <option selected>{{coach['Coach Name']}}</option> 
+				            </select>
+				            <label for="{{coach['Team Name']}}">{{coach['Team Name']}}</label>
+				        </td>
+			        </tr>
+				</tr>
+	    </form>
+	</div>
+</div>
+
+<style>
+	#coachlabel {
+		padding-bottom: 20px;
+	}
+</style>
+
+{% endfor %}
+{% endif %}
+{% endblock %}

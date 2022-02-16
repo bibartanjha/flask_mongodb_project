@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+                
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
+        <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+        <!-- fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Itim&family=Oswald&family=Sofia&family=Ubuntu:wght@300;500&display=swap" rel="stylesheet">
+        
+                <!-- Bootstrap init -->
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+        <!-- social media links -->    
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        {% block head %}
+        <title>EE461L: NBA Project</title>
+        {% endblock %}
+        
+    </head>
+    
+    <body>
+        
+        <!-- NAV BAR -->
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        
+            <a class="navbar-brand" href="/">NBA &amp; WNBA Database</a>
+            <img src="/static/images/WNBA_logo.png" alt="No Picture Found" style="height:30px; margin-right: 7px;">
+            <img src="/static/images/NBA_logo.jpeg" alt="No Picture Found" style="height:30px;">
+            <ul class="navbar-nav">
+                <!-- MAIN PAGES -->
+                <li class="nav-item">
+                    <a class="nav-link" href='/Players'>Players</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/Teams'>Teams</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/News'>News</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/AboutPage'>About</a>
+                </li>
+                <!-- DROP-DOWN, extra pages -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle id=navbardrop" data-toggle="dropdown">More</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/Fantasy">Fantasy</a>
+                        <a class="dropdown-item" href="/Franchise_Leaders">Franchise Leaders</a>
+                        <a class="dropdown-item" href="/Coaches">Coaches</a>
+                        <a class="dropdown-item" href="/Year">Archive</a>
+                        <a class="dropdown-item" href="/favteam">Favorite Team</a>
+                        <a class="dropdown-item" href="/favplayer">Favorite Player</a>
+                        <a class="dropdown-item" href="/comparison">Compare</a>
+                        <a class="dropdown-item" href="/Settings">Settings</a>
+                    </div>
+                </li>
+            </ul>    
+            <button id="logbutton" type='button' style="position: absolute; right: 10px; text-align: center">
+                {% if log %} 
+                <!-- user is logged in, display log out button-->
+                <a class="nav-link" href="/loggedout">Log Out</a>
+                {% else %}
+                <!-- user is logged in, display log in button-->
+                <a class="nav-link" href="/account">Login</a>
+                {% endif %}
+            </button>
+        </nav>
+        {% block body %}
+        
+        <!-- SCORES -->
+        <div class="container" id="homepage">
+            <h2 style="text-align: center; font-family:'Ubuntu';">HOME</h2>
+            <div class="container p-5 center" id="box_score" >
+                <h4 style="text-align: center; font-family:'Ubuntu';">NBA Games from 2019</h4>
+
+                <table id="hp_table" class="center" style="width:80%; text-align: center">
+                    <caption>Highlights for 5 random games from the 2019 NBA regular season</caption>
+                    <tr>
+                        <th>Home</th>
+                        <th>Score</th>
+                        <th> vs </th>
+                        <th>Away</th>
+                        <th>Score</th>
+                    </tr>
+                    {% for x in range(5) %}
+                    <tr>
+                        <td>{{ scores[x][1] }}</td>
+                        <td>{{ scores[x][0] }}</td>
+                        <td> </td>
+                        <td>{{ scores[x][3] }}</td>
+                        <td>{{ scores[x][2] }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            
+            </div>
+
+        </div>
+        {% endblock %}
+        <style>
+            body {
+                background-color: white;
+            }
+            .container-fluid {
+                margin-top: 0px;
+                margin-bottom: 0px;
+                background-color: #fff3db;
+            }
+            .center {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            table {
+                margin-left: auto;
+                margin-right: auto;
+                width: 100%;
+                border: transparent;
+                background-color: #ffefc2;
+                border-radius: 5px;
+            }
+            td, th {
+                padding: 10px;
+            }
+
+
+            tbody tr:nth-child(even) {
+                background-color: #edd698;
+            }
+            a {
+                color: #b88a00;
+            }
+
+            .fa {
+              padding: 20px;
+              font-size: 30px;
+              width: 100px;
+              text-align: center;
+              text-decoration: none;
+              margin: 5px 2px;
+              border-radius: 50%;
+            }
+
+            .fa:hover {
+                opacity: 0.7;
+            }
+
+            .fa-facebook {
+              background: #3B5998;
+              color: white;
+            }
+
+            .fa-twitter {
+              background: #55ACEE;
+              color: white;
+            }
+
+
+            .fa-instagram {
+              background: #125688;
+              color: white;
+            }
+
+            .carousel-inner img {
+            width: 20%;
+            height: 20%;
+            }
+
+            .carousel-control-prev-icon,
+            .carousel-control-next-icon {
+              background-color: black;
+            }
+
+        </style>
+
+    </body>
+</html>

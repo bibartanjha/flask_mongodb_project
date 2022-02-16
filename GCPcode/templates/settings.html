@@ -1,0 +1,42 @@
+{% extends 'index.html' %}
+
+
+{% block head %}
+<title>EE461L: Settings</title>
+{% endblock %}
+
+{% block body %}
+<div class="container p-5" id="settingspage">
+	<h4 style="text-align:center; font-family: 'Ubuntu';">Settings</h4>
+	<h6 style="text-align: center; font-family: 'Ubuntu';"> Make changes to your account and your favorite!</h6>
+	<br>
+	<table class="center" style="width:400px; text-align: center">
+		<tr>
+			<th>Account</th>
+		</tr>
+		<tr>
+			<td><a href="/changepassword">Change Password</a></td>
+		</tr>
+	</table>
+	<table class="center" style="width:400px; text-align: center">
+		<tr>
+			<th>Website</th>
+		</tr>
+		<br>
+		<!-- <tr>
+			<td><a href="#">Customize Website</a></td>
+		</tr> -->
+		<tr>
+			<td><a href="/Teams">Set Favorite Teams</a></td>
+		</tr>
+		<tr>
+			<td><a href="/Players">Set Favorite Players</a></td>
+		</tr>
+		<!-- <tr>
+			<td><a href="#">Share Settings</a></td>
+		</tr> -->
+	</table>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,253 @@
+{% extends 'index.html' %}
+
+
+{% block head %}
+<style>
+
+.calendar{
+    border-radius: 4px;
+    max-width: 800px;
+    background-color: lightblue;
+    color: #333333;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.yearInfo {
+  border-radius: 4px;
+  overflow: hidden;
+  max-width: 800px;
+  background-color: #F48989;
+  color: #333333;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+body {
+  text-align: center;
+}
+
+.customClass {
+    height: 100px;
+    overflow-y: auto
+}
+
+#scroll_top_button {
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    z-index: 99;
+    border: none;
+    outline: none;
+    background-color: red;
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
+#scroll_top_button:hover {
+    background-color: #555
+}
+
+.decade{
+    border: 0px transparent;
+    border-radius: 15px;
+    font-size: 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left:5px;
+    margin-right:5px;
+    padding: 5px 22px;
+    font-size: 14px;
+    text-align: center;
+    color: black;
+    background-color: #008bed;
+    font-family: 'Ubuntu';
+}
+
+.decade_active{
+    border: 0px transparent;
+    border-radius: 15px;
+    font-size: 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left:5px;
+    margin-right:5px;
+    padding: 5px 22px;
+    font-size: 14px;
+    text-align: center;
+    color: white;
+    background-color: red;
+    font-family: 'Ubuntu';
+}
+
+.year {
+  border: 0px transparent;
+    border-radius: 15px;
+    font-size: 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left:5px;
+    margin-right:5px;
+    padding: 5px 22px;
+    font-size: 14px;
+    text-align: center;
+    color: #b88a00;
+    background-color: white;
+    font-family: 'Ubuntu';
+}
+
+.year_active {
+  border: 0px transparent;
+    border-radius: 15px;
+    font-size: 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left:5px;
+    margin-right:5px;
+    padding: 5px 22px;
+    font-size: 14px;
+    text-align: center;
+    color: white;
+    background-color: green;
+    font-family: 'Ubuntu';
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Ubuntu';
+}
+
+</style>
+
+{% endblock %}
+
+{% block title %}
+<title>Archive</title>
+{% endblock %}
+{% block body %}
+<div class="mx-auto" style="width:100%">
+    <div class="jumbotron bg-warning text-white" style="border-radius:0px; margin-bottom:0px;">
+        <h1 style = "color: white">Archive</h1>
+        <br>
+        <h4 style = "color: white">Select a year below</h4>
+    </div>
+</div>
+
+<!--div class="jumbotron bg-warning text-white" style="text-align: center">
+    <h1 style = "color: white">Archive</h1>
+    <h3 style = "color: white">Select a year below</h3>
+    <div style="margin: auto;">
+        <input type="text" id="yearSearch" name="yearSearch" placeholder="Enter year 1947-2019" >
+        <button onclick="myFunction()" class="btn btn-secondary ml-3">Scroll</button>
+    </div>
+</div-->
+
+<div class="calendar">
+  <div class="col rightCol">
+    <div class="content">
+      <div class="container" id="pagination_container">
+        <span>
+        <div style="display: flex;">
+            {% for i in range(1, num_pages+1) %}
+            <form action="/Year" method="GET">
+                <select hidden name="page" id="page" class="custom-select-sm">
+                    <option selected>{{i}}</option> 
+                </select>
+                {% if i == page %}
+                  <input type="submit" value="{{2020 - i * 10}}s" class="decade_active">
+                {% else %}
+                  <input type="submit" value="{{2020 - i * 10}}s" class="decade">
+                {% endif %}
+            </form>
+            {% endfor %}
+        </div>
+        <span>
+    </div>
+      <ul class="days">
+        {% for i in range(posts| length) %}
+            <form action="/Year" method="GET" style="display: inline;">
+              <select hidden name="page" id="page" class="custom-select-sm">
+                    <option selected>{{page}}</option> 
+                </select>
+              <select hidden name="year" id="year" class="custom-select-sm">
+                  <option selected>{{posts[i]['Year']}}</a> 
+              </select>
+              {% if year_Was_Chosen %}
+                {% if posts[i]['Year'] == year['Year']%}
+                  <input type="submit" value="{{posts[i]['Year']}}" class="year_active"/>
+                {% else %}
+                  <input type="submit" value="{{posts[i]['Year']}}" class="year"/>
+                {% endif %}
+              {% else %}
+                <input type="submit" value="{{posts[i]['Year']}}" class="year"/>
+              {% endif %}
+            </form>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+{% if year_Was_Chosen %}
+<div class="yearInfo">
+  <div class="col rightCol">
+    <div class="content">
+      <h1 id = "currentYear">{{year['Year']}}</h1>
+      <figure>
+          <img src="/static/images/teamspage/{{ year['NBA Finals Winner'] }}.jpg" alt="No picture found" width="120" height="120" />
+          <figcaption style="font-family: 'Ubuntu';">Finals Champion</figcaption>
+      </figure>
+      <br><br>
+      <table>
+              <tr>
+                  <td style="font-weight:bold">Finals Champion</td>
+                  <td id = "finalsWinner">{{year['NBA Finals Winner']}}</td>
+              </tr>
+              <tr>
+                  <td style="font-weight:bold">Western Conference Champion</td>
+                  <td id = "westernChampion">{{year['Western Champion']}}</td>
+              </tr>
+              <tr>
+                  <td style="font-weight:bold">Eastern Conference Champion</td>
+                  <td id = "easternChampion">{{year['Eastern Champion']}}</td>
+              </tr>
+              <tr>
+                  <td style="font-weight:bold">Finals MVP</td>
+                  {%if year['Finals MVP'] == "" %}
+                      <td>None</td>
+                  {% else %}
+                      <td>{{year['Finals MVP']}}</td>
+                  {% endif %}
+              </tr>
+              <tr>
+                  <td style="font-weight:bold">Season MVP</td>
+                  <td id = "seasonMVP">
+                      {%if year['Season MVP'] == "" %}
+                          None
+                      {% else %}
+                         {{year['Season MVP']}}
+                      {% endif %} 
+                  </td>
+              </tr>
+      </table>
+    </div>
+  </div>
+</div>
+{% endif %}
+<!--script>
+    function myFunction() {
+        var elmnt = document.getElementById(document.getElementById("yearSearch").value);
+        if (elmnt != null) 
+            elmnt.scrollIntoView();
+    }
+</script-->
+
+<button onclick="topFunction()" id="scroll_top_button" title="Scroll Back to Top">Top</button>
+
+{% endblock %}
+
